@@ -4,14 +4,16 @@ import Main from '@/components/Main.vue'
 </script>
 
 <template>
-  <header>
-    <TheHeader />
-  </header>
+  <div>
+    <header>
+      <TheHeader />
+    </header>
 
-  <main>
-    <Main />
-  </main>
+    <main>
+      <Main />
+    </main>
+  </div>
 </template>
 
-<style scoped>
+<style>
 </style>
