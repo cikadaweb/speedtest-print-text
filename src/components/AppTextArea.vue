@@ -1,20 +1,19 @@
 <script setup lang="ts">
-import { ref, onBeforeUnmount, watch, toRefs, computed } from "vue";
+import { ref, onBeforeUnmount, watch, toRefs } from "vue";
 
 const props = defineProps<{
   text: string,
-  isResetCounter: boolean
-}>()
+}>();
 
-const emit = defineEmits(['changeResetStatus']);
+const emits = defineEmits(['change-reset-status', 'incr-correct-tap-count', 'incr-incorrect-tap-count']);
 
-const { text, isResetCounter } = toRefs(props);
+const { text } = toRefs(props);
 
-let masSymbols = ref([]);
+const masSymbols = ref([]);
 
 const userInput = ref('');
 const lastCharIndex = ref(0);
-const iRememberLastError = ref(-1);
+const iRememberLastErrorIndex = ref(-1);
 
 const handleKeyDown = (event: any) => {
   const regex = /^[a-zA-Z0-9\s\p{P}]+$/u; // регулярное выражение для букв, цифр и пробелов
@@ -28,46 +27,47 @@ window.addEventListener('keypress', handleKeyDown);
 
 onBeforeUnmount(() => {
   window.removeEventListener('keypress', handleKeyDown);
-})
-
-const isCurrent = (index: number) => {
-  return index === lastCharIndex.value
-}
-
-const isCorrect = (index: number) => {
-  return index < lastCharIndex.value
-}
-
-const isIncorrect = (index: number) => {
-  return index === iRememberLastError.value
-}
-
-watch(text, (newValue) => {
-  masSymbols = newValue.replace(/  +/g, " ").split('')
 });
+
+const isCurrent = (index: number) => {  // текщий символ
+  return index === lastCharIndex.value;
+};
+
+const isCorrect = (index: number) => { // все предыдущии символы корректны
+  return index < lastCharIndex.value;
+};
+
+const isIncorrect = (index: number) => { // если данный индекс уже был ошибкой
+  return index === iRememberLastErrorIndex.value;
+};
+
+watch(text, (newValue) => { // обновился текст
+  masSymbols.value = newValue.replace(/  +/g, " ").split('');
+  userInput.value = '';
+  lastCharIndex.value = 0;
+  iRememberLastErrorIndex.value = -1;
+  emits('change-reset-status');
+}, { immediate: true });
 
 watch(userInput, (newValue) => {
   const inputLastChar = newValue.charAt(newValue.length - 1);
-  const rightLastChar = text.value[lastCharIndex.value];
-  console.log('Последний символ введенный пользователем: ', inputLastChar);
-  console.log('Последний символ, который нужно ввести: ', rightLastChar);
-  if (inputLastChar === rightLastChar) {
+  const correctLastChar = text.value[lastCharIndex.value];
+
+  // console.log('Последний символ введенный пользователем: ', inputLastChar);
+  // console.log('Последний символ, который нужно ввести: ', correctLastChar);
+  if (inputLastChar === correctLastChar) {
     lastCharIndex.value++;
-    iRememberLastError.value = -1; // индекс ошибки обнуляем
+    iRememberLastErrorIndex.value = -1; // индекс ошибки обнуляем
+    emits('incr-correct-tap-count');
   } else {
-    iRememberLastError.value = lastCharIndex.value;
-    console.log('В символе с индексом ', lastCharIndex.value, 'допущена ошибка!')
+    if (iRememberLastErrorIndex.value === lastCharIndex.value) {
+      return;
+    }
+    iRememberLastErrorIndex.value = lastCharIndex.value;
+    emits('incr-incorrect-tap-count');
+    // console.log('В символе с индексом ', lastCharIndex.value, 'допущена ошибка!');
   }
 });
-
-watch(isResetCounter, (newValue) => {
-  if (newValue) {
-    userInput.value = '';
-    lastCharIndex.value = 0;
-    iRememberLastError.value = -1;
-    emit('changeResetStatus'); // ToDo
-  }
-}, { immediate: false });
 
 </script>
 
@@ -97,13 +97,13 @@ watch(isResetCounter, (newValue) => {
   top: -10px;
   width: 100%;
   /* height: 1px;
-    font-size: 16px;
-    overflow: hidden;
-    border: none;
-    color: transparent;
-    background-color: transparent;
-    caret-color: transparent;
-    outline: 0; */
+  font-size: 16px;
+  overflow: hidden;
+  border: none;
+  color: transparent;
+  background-color: transparent;
+  caret-color: transparent;
+  outline: 0; */
 }
 
 .text-area__span {}
