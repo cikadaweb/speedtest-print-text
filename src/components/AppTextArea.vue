@@ -3,17 +3,19 @@ import { ref, onBeforeUnmount, watch, toRefs } from "vue";
 
 const props = defineProps<{
   text: string,
+  isFirstChartEntered: boolean
 }>();
 
-const emits = defineEmits(['change-reset-status', 'incr-correct-tap-count', 'incr-incorrect-tap-count']);
+const emits = defineEmits(['change-reset-status', 'incr-correct-tap-count', 'incr-incorrect-tap-count', 'start-interval', 'change-status']);
 
-const { text } = toRefs(props);
+const { text, isFirstChartEntered } = toRefs(props);
 
 const masSymbols = ref([]);
 
 const userInput = ref('');
 const lastCharIndex = ref(0);
 const iRememberLastErrorIndex = ref(-1);
+
 
 const handleKeyDown = (event: any) => {
   const regex = /^[a-zA-Z0-9\s\p{P}]+$/u; // регулярное выражение для букв, цифр и пробелов
@@ -50,6 +52,11 @@ watch(text, (newValue) => { // обновился текст
 }, { immediate: true });
 
 watch(userInput, (newValue) => {
+  if (!isFirstChartEntered.value) { // проверка на первый ввод
+    emits('start-interval');
+  }
+  emits('change-status'); // меняем флаг запуска интервала
+
   const inputLastChar = newValue.charAt(newValue.length - 1);
   const correctLastChar = text.value[lastCharIndex.value];
 
