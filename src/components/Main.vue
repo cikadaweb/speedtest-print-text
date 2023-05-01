@@ -9,6 +9,7 @@ import { ref, onBeforeUnmount } from "vue";
 const text = ref('');
 
 const isShowLoader = ref(true);
+const isFirstChartEntered = ref(false);
 const isShowFinishModal = ref(false);
 
 const fetchApiText = async () => {
@@ -22,6 +23,8 @@ const fetchApiText = async () => {
 }
 
 const changeResetStatus = () => {
+  isFirstChartEntered.value = false;
+  stopMainInterval();
   correctTapCount.value = 0;
   inсorrectTapCount.value = 0;
   timePassed.value = 0;
@@ -41,13 +44,28 @@ const incrIncorrectTapCount = () => {
 };
 
 const timePassed = ref(0);
+let speedInterval;
 
-const interval = setInterval(() => {
-  timePassed.value++;
-}, 1000);
+const startMainInterval = () => {
+  speedInterval = setInterval(() => {
+    timePassed.value++;
+  }, 1000);
+};
+
+const stopMainInterval = () => {
+  clearInterval(speedInterval);
+};
+
+const startInterval = () => {
+  startMainInterval();
+};
+
+const changeStatus = () => {
+  isFirstChartEntered.value = true;
+}
 
 onBeforeUnmount(() => {
-  clearInterval(interval);
+  clearInterval(speedInterval);
 });
 
 </script>
@@ -63,9 +81,12 @@ onBeforeUnmount(() => {
 
         <AppTextArea
           :text="text"
+          :is-first-chart-entered="isFirstChartEntered"
           @change-reset-status="changeResetStatus"
           @incr-correct-tap-count="incrCorrectTapCount"
           @incr-incorrect-tap-count="incrIncorrectTapCount"
+          @start-interval="startInterval"
+          @change-status="changeStatus"  
         />
 
         </div>
