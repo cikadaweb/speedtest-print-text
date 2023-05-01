@@ -9,10 +9,11 @@ const props = defineProps<{
 const { timePassed, correctTapCount } = toRefs(props);
 
 const speedResult = computed(() => {
-  if (Math.ceil((correctTapCount.value / timePassed.value) * 60).toString() === 'NaN') {
+  const currentSpeedValue = Math.ceil((correctTapCount.value / timePassed.value) * 60);
+  if (isNaN(currentSpeedValue) || !isFinite(currentSpeedValue)) {
     return 0;
   } else {
-    return Math.ceil((correctTapCount.value / timePassed.value) * 60);
+    return currentSpeedValue;
   }
 });
 </script>
