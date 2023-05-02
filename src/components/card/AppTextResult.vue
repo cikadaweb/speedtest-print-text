@@ -10,6 +10,10 @@ const props = defineProps<{
 const { inсorrectTapCount, correctTapCount, text } = toRefs(props);
 
 const exactResult = computed(() => {
+  /* 
+    Формула точности:
+    100 - (Количество неверно введенных символов / Количество всех введенных символов) * 100%
+  */
   if (correctTapCount.value === 0) {
     return 100;
   }
@@ -28,7 +32,3 @@ const exactResult = computed(() => {
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>

@@ -31,7 +31,6 @@ const handleKeyDown = (event: any) => {
   if (regex.test(event.key)) {
     userInput.value += event.key;
   }
-  // console.log('userInput: ', userInput.value)
 }
 
 window.addEventListener('keypress', handleKeyDown);
@@ -73,8 +72,6 @@ watch(userInput, (newValue) => {
     emits('change-finish-status');
   }
 
-  // console.log('Последний символ введенный пользователем: ', inputLastChar);
-  // console.log('Последний символ, который нужно ввести: ', correctLastChar);
   if (inputLastChar === correctLastChar) {
     lastCharIndex.value++;
     iRememberLastErrorIndex.value = -1; // индекс ошибки обнуляем
@@ -85,7 +82,6 @@ watch(userInput, (newValue) => {
     }
     iRememberLastErrorIndex.value = lastCharIndex.value;
     emits('incr-incorrect-tap-count');
-    // console.log('В символе с индексом ', lastCharIndex.value, 'допущена ошибка!');
   }
 });
 

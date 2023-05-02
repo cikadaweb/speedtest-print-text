@@ -9,6 +9,10 @@ const props = defineProps<{
 const { timePassed, correctTapCount } = toRefs(props);
 
 const speedResult = computed(() => {
+  /* 
+    Формула скорости:
+    (количество символов, которые уже введены верно / (количество секунд, прошедших с момента начала набора)) x 60
+  */
   const currentSpeedValue = Math.ceil((correctTapCount.value / timePassed.value) * 60);
   if (isNaN(currentSpeedValue) || !isFinite(currentSpeedValue)) {
     return 0;
@@ -28,7 +32,3 @@ const speedResult = computed(() => {
     </div>
   </div>
 </template>
-
-<style scoped>
-
-</style>
