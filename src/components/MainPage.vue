@@ -10,7 +10,7 @@ const text = ref('');
 
 const isShowLoader = ref(true);
 const isFirstChartEntered = ref(false);
-const isShowFinishModal = ref(false);
+const isShowFinishModal = ref(true);
 
 const fetchApiText = async () => {
   isShowLoader.value = true;
@@ -18,12 +18,13 @@ const fetchApiText = async () => {
     "https://baconipsum.com/api/?type=all-meat&paras=1&start-with-lorem=1"
   );
   const data = await response.json();
-  text.value = data.join("").replace(/  +/g, " ");;
+  text.value = data.join("").replace(/  +/g, " ");
   isShowLoader.value = false;
 }
 
 const changeResetStatus = () => {
   isFirstChartEntered.value = false;
+  isShowFinishModal.value = false;
   stopMainInterval();
   correctTapCount.value = 0;
   inсorrectTapCount.value = 0;
@@ -60,8 +61,13 @@ const startInterval = () => {
   startMainInterval();
 };
 
-const changeStatus = () => {
+const changeFirstChartEnteredStatus = () => {
   isFirstChartEntered.value = true;
+}
+
+const changeFinishStatus = () => {
+  isShowFinishModal.value = true;
+  stopMainInterval();
 }
 
 onBeforeUnmount(() => {
@@ -82,11 +88,13 @@ onBeforeUnmount(() => {
         <AppTextArea
           :text="text"
           :is-first-chart-entered="isFirstChartEntered"
+          :is-show-finish-modal="isShowFinishModal"
           @change-reset-status="changeResetStatus"
           @incr-correct-tap-count="incrCorrectTapCount"
           @incr-incorrect-tap-count="incrIncorrectTapCount"
           @start-interval="startInterval"
-          @change-status="changeStatus"  
+          @change-first-chart-entered-status="changeFirstChartEnteredStatus"
+          @change-finish-status="changeFinishStatus"
         />
 
         </div>
