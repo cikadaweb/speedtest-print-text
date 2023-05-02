@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import TheHeader from '@/components/TheHeader.vue'
+import TheHeader from '@/components/header/TheHeader.vue'
 import MainPage from '@/components/MainPage.vue'
-import AppModal from '@/components/AppModal.vue';
+import AppModal from '@/components/modal/AppModal.vue';
 
 </script>
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import AppTextArea from '@/components/AppTextArea.vue';
-import AppTextSpeed from '@/components/AppTextSpeed.vue';
-import AppTextResult from '@/components/AppTextResult.vue';
-import AppLoader from '@/components/AppLoader.vue';
+import AppTextArea from '@/components/card/AppTextArea.vue';
+import AppTextSpeed from '@/components/card/AppTextSpeed.vue';
+import AppTextResult from '@/components/card/AppTextResult.vue';
+import AppLoader from '@/components/loader/AppLoader.vue';
 
 import { ref, onBeforeUnmount } from "vue";
 
