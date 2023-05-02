@@ -44,7 +44,7 @@ const incrIncorrectTapCount = () => {
 };
 
 const timePassed = ref(0);
-let speedInterval;
+let speedInterval: ReturnType<typeof setInterval> | undefined;
 
 const startMainInterval = () => {
   speedInterval = setInterval(() => {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TheHeader from '@/components/TheHeader.vue'
-import Main from '@/components/Main.vue'
+import MainPage from '@/components/MainPage.vue'
 import AppModal from '@/components/AppModal.vue';
 
 </script>
@@ -14,7 +14,7 @@ import AppModal from '@/components/AppModal.vue';
     </header>
 
     <main>
-      <Main />
+      <MainPage />
     </main>
   </div>
 </template>
