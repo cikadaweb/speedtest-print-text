@@ -10,7 +10,7 @@ const emits = defineEmits(['change-reset-status', 'incr-correct-tap-count', 'inc
 
 const { text, isFirstChartEntered } = toRefs(props);
 
-const masSymbols = ref([]);
+const masSymbols = ref([] as string[]);
 
 const userInput = ref('');
 const lastCharIndex = ref(0);
@@ -112,8 +112,6 @@ watch(userInput, (newValue) => {
   caret-color: transparent;
   outline: 0; */
 }
-
-.text-area__span {}
 
 .passed-text {
   color: #5bc538;
